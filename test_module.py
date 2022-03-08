@@ -1,4 +1,6 @@
 import unittest
+from unittest.mock import patch
+from requests.exceptions import Timeout, ConnectionError
 from api_parser import api_parse
 
 
@@ -42,19 +44,16 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(actual, expected,
                      'Expected different output when calling "api_parse()"\
                       with https://jsonplaceholder.typicode.com/users/1')
-    def test_connection_error(self):
-        actual = api_parse('http://youuuuuuuu.com')
-        expected = "Error Connecting: Connection Error occured"
-        self.assertEqual(actual, expected,
-                         'Expected calling "api_parse()" \
-                          with a problem that causes ConnectionError "Error Connecting: Connection Error occured"')
+    
+    @patch('api_parser.requests.get', side_effect=ConnectionError())
+    def test_connection_error(self, mock_get):
+        with self.assertRaises(ConnectionError):
+            api_parse()
 
-    def test_timeout(self):
-        actual = api_parse('https://httpbin.org/delay/10')
-        expected = "Timeout Error: Timeout Error occured"
-        self.assertEqual(actual, expected,
-                          'Expected calling "api_parse()" \
-                          with a problem that causes Timeout Error "Timeout Error: Timeout Error occured"')
+    @patch('api_parser.requests.get', side_effect=Timeout())
+    def test_timeout(self, mock_get):
+        with self.assertRaises(Timeout):
+            api_parse()
 
 if __name__ == "__main__":
     unittest.main()

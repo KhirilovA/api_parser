@@ -1,9 +1,9 @@
 import requests
 
-def api_parse(url:str):
+def api_parse(url:str='https://jsonplaceholder.typicode.com/users/1'):
     try:
-        return requests.get(url, timeout=5).json()
-    except requests.exceptions.ConnectionError:
-        return "Error Connecting: Connection Error occured"
-    except requests.exceptions.Timeout:
-        return "Timeout Error: Timeout Error occured"
+        return requests.get(url).json()
+    except requests.exceptions.ConnectionError as ConnectionError:
+        raise ConnectionError 
+    except requests.exceptions.Timeout as Timeout:
+        raise Timeout
