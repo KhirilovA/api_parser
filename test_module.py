@@ -42,6 +42,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(actual, expected,
                      'Expected different output when calling "api_parse()"\
                       with https://jsonplaceholder.typicode.com/users/1')
+    
     def test_connection_error(self):
         actual = api_parse('http://youuuuuuuu.com')
         expected = "Error Connecting: Connection Error occured"
