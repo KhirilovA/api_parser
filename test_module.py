@@ -40,9 +40,21 @@ class UnitTests(unittest.TestCase):
                   }
                 }
         self.assertEqual(actual, expected,
-                         'Expected different output when calling "api_parse()"\
-                          with https://jsonplaceholder.typicode.com/users/1')
+                     'Expected different output when calling "api_parse()"\
+                      with https://jsonplaceholder.typicode.com/users/1')
+    def test_connection_error(self):
+        actual = api_parse('http://youuuuuuuu.com')
+        expected = "Error Connecting: Connection Error occured"
+        self.assertEqual(actual, expected,
+                         'Expected calling "api_parse()" \
+                          with a problem that causes ConnectionError "Error Connecting: Connection Error occured"')
 
+    def test_timeout(self):
+        actual = api_parse('https://httpbin.org/delay/10')
+        expected = "Timeout Error: Timeout Error occured"
+        self.assertEqual(actual, expected,
+                          'Expected calling "api_parse()" \
+                          with a problem that causes Timeout Error "Timeout Error: Timeout Error occured"')
 
 if __name__ == "__main__":
     unittest.main()
